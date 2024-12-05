@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adaptive Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .chat-box {
+            margin-bottom: 20px;
+        }
+        .user-input {
+            width: calc(100% - 50px);
+            padding: 10px;
+            font-size: 16px;
+        }
+        .send-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .send-button:hover {
+            background-color: #0056b3;
+        }
+        .response {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Adaptive Chatbot</h1>
+        <div class="chat-box">
+            <input id="userInput" class="user-input" type="text" placeholder="Type your message here...">
+            <button class="send-button" onclick="sendMessage()">Send</button>
+        </div>
+        <div id="responseBox" class="response"></div>
+    </div>
+    <script>
+        async function sendMessage() {
+            const userInput = document.getElementById("userInput").value;
+            const responseBox = document.getElementById("responseBox");
+            responseBox.innerHTML = "Processing...";
+            try {
+                const response = await fetch("/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ message: userInput })
+                });
+                const data = await response.json();
+                responseBox.innerHTML = data.response || "Error processing your message.";
+            } catch (error) {
+                responseBox.innerHTML = "An error occurred. Please try again.";
+            }
+        }
+    </script>
+</body>
+</html>
